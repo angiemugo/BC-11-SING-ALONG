@@ -1,5 +1,5 @@
 # bc-11-sing-along
-DESCRIPTION
+DESCRIPTION\n
 sing-along app is an application built on python that enables a user to find lyrics using either lyrics, song name or artist name. 
 it is a command line application based on click.
 DEPENDENCIES
