@@ -1,0 +1,8 @@
+.idea
+env
+env/
+env/**
+code.py
+try.py
+search_methods.py
+*.pyc
