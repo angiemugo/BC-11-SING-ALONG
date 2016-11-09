@@ -21,6 +21,7 @@ This app has four functionalities:song_save, song_view, song_search and clear.
 3.	$ pip install -r requirements.txt
 4.	Launch the app by executing app.py and specify the click interactive menu
 5.	The class attendance is now up running. The usage commands are well documented, and can be accessed any time by passing the -h or --help option
+
 ##**RESOURCES**
 •	click
 •	SQLalchemy
