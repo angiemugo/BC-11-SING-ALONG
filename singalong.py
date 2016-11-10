@@ -108,7 +108,7 @@ class Lyrics():
         print "**************Database Cleared**************\n\n"
 
 
-
+'''
 
 if __name__ == "__main__":
     lyric=Lyrics()
@@ -136,3 +136,4 @@ if __name__ == "__main__":
 
         else:
             print "Invalid Entry"
+'''

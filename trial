@@ -1,0 +1,25 @@
+
+def song_find(self, query):
+    method = "track.search"
+    query_string = {"apikey": self.api_key, "q": query}
+    data = requests.get(self.api + method, params=query_string).json()
+    songs_table = table(['Track Number', 'Track ID', 'Track Name', 'Artist Name', 'Has Lyrics'])
+    index = 1
+    for item in data['message']['body']['track_list']:  # [0]['track']['artist_name']
+        track_id = item['track']['track_id']
+        track_name = item['track']['track_name']
+        artist_name = item['track']['artist_name']
+        has_lyrics = item['track']['has_lyrics']
+        song = {}
+        song["id"] = track_id
+        song["name"] = track_name
+        song["artist_name"] = artist_name
+        if has_lyrics == "0":
+            song["lyrics"] = "NO"
+        else:
+            song["lyrics"] = "YES"
+
+        songs_table.add_row([index, track_id, track_name, artist_name, song["lyrics"]])
+        self.songs[index] = song
+        index += 1
+    print songs_table

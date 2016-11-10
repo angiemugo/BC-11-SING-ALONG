@@ -1,9 +1,9 @@
 """
     Commands:
-        song find <search_query_string>
-        song view <song_id>
-        song_save <song_id>
-        clear <>
+        song_find <query>
+        song_view <track_number>
+        song_save <track_id>
+        clear
         quit
     Options:
         -h, --help  Show this screen and exit
@@ -46,7 +46,7 @@ def docopt_cmd(func):
     fn.__dict__.update(func.__dict__)
     return fn
 
-
+lyric = Lyrics()
 class Singalong (cmd.Cmd):
     intro = 'Welcome to my interactive program!' \
         + ' (type help for a list of commands.)'
@@ -54,40 +54,31 @@ class Singalong (cmd.Cmd):
     file = None
 
     @docopt_cmd
-    def do_tcp(self, arg):
-        """Usage: tcp <host> <port> [--timeout=<seconds>]"""
-
-        print(arg)
-
-    @docopt_cmd
-    def do_serial(self, arg):
-        """Usage: serial <port> [--baud=<n>] [--timeout=<seconds>]"""
-    @docopt_cmd
     def do_song_find(self, arg):
-        """Usage: song find <search_query_string>"""
+        """Usage: song_find <query>"""
         query = arg['<query>']
-        lyric = Lyrics()
-        lyric.song_find(arg)
+        # lyric = Lyrics()
+        song_table = lyric.song_find(query)
+        print song_table
 
 
     @docopt_cmd
     def do_song_view(self, arg):
-        """Usage: song view <song_id>"""
-        song_id = arg['<song_id>']
-        lyric = Lyrics()
-        lyric.song_view(arg)
+        """Usage: song_view <track_number>"""
+        song_id = arg['<track_number>']
+        # lyric = Lyrics()
+        lyric.song_view(song_id)
 
     @docopt_cmd
     def do_song_save(self, arg):
-        """Usage: song save <song_id>"""
-        song_id = arg['<song_id>']
-        lyric = Lyrics()
-        lyric.song_save(arg)
+        """Usage: song_save <track_id>"""
+        song_id = arg['<track_id>']
+        lyric.song_save(song_id)
 
     @docopt_cmd
-    def do_song_clear(self):
-        """Usage: clear <>"""
-        lyric = Lyrics()
+    def do_song_clear(self, arg):
+        """Usage: clear """
+        # lyric = Lyrics()
         lyric.song_clear()
 
 
@@ -99,4 +90,7 @@ class Singalong (cmd.Cmd):
         exit()
 
 if __name__ == "__main__":
-    Singalong().cmdloop()
+    try:
+        Singalong().cmdloop()
+    except KeyboardInterrupt:
+        print('Exiting application')

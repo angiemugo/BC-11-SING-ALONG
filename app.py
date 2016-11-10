@@ -14,21 +14,25 @@ session = Session()
 
 
 Base = declarative_base()
+'''
+initialises the api key, dictionary and session
+'''
 
 
 class Lyrics():
     def __init__(self):
         self.api = "http://api.musixmatch.com/ws/1.1/"
-        self.api_key="d80da5faf57de840510a37c527f2cb51"
+        self.api_key="a95d4bb2f42b0052cb2e1ee723c71f72"
         self.songs={}
         self.session = Session()
+    '''searches for song details usi'''
 
     def song_find(self,query):
 
         method = "track.search"
         query_string = {"apikey": self.api_key, "q": query}
         data = requests.get(self.api + method, params=query_string).json()
-        t = table(['Track Number','Track ID', 'Track Name', 'Artist Name','Has Lyrics'])
+        songs_table = table(['Track Number','Track ID', 'Track Name', 'Artist Name','Has Lyrics'])
         index=1
         for item in data['message']['body']['track_list']:  # [0]['track']['artist_name']
             track_id = item['track']['track_id']
@@ -43,19 +47,25 @@ class Lyrics():
                 song["lyrics"]="NO"
             else:
                 song["lyrics"]="YES"
-            t.add_row([index,track_id,track_name,artist_name,song["lyrics"]])
+
+            songs_table.add_row([index,track_id,track_name,artist_name,song["lyrics"]])
             self.songs[index]=song
             index+=1
-        print t
+        print songs_table
         self.song_view()
 
 
 
+
+
     def song_view(self):
+
+
         track_number=raw_input("\nSelect song by track number: ")
         track= self.songs[int(track_number)]
         track_id = str(track["id"])
-        if self.session.query(Music, Music.song_id == track_id).count() == 0:
+
+        if self.session.query(Music).filter_by(song_id=track_id).count() == 0:
             method = "track.lyrics.get"
             query_string = {"apikey": self.api_key, "track_id": track_id}
             response = requests.get(self.api + method, params=query_string)
@@ -67,7 +77,9 @@ class Lyrics():
             track["lyrics"]=lyrics
             print lyrics
             self.songs[track_id]=track
-            self.song_save(track_id)
+            save=raw_input("This song was not found in the database, would you like to save it? 1 for YES, 2 for NO: ")
+            if save=='1':
+                self.song_save(track_id)
         else:
             for row in self.session.query(Music, Music.song_id == track_id):
                 print "\n\n" + row.Music.song_name + " by " + row.Music.artist_name
@@ -87,6 +99,7 @@ class Lyrics():
         music.song_name=track["name"]
         self.session.add(music)
         self.session.commit()
+        print music.song_name + " Saved Successfully\n"
 
 
     def song_clear(self):
@@ -99,14 +112,14 @@ class Lyrics():
 
 if __name__ == "__main__":
     lyric=Lyrics()
+    query = raw_input("Enter text to search for song, lyrics or artist: ")
+    lyric.song_find(query)
     while True:
         print "\nWhat would you like to do?"
         print "*"*30
         print "1: Find a song"
-        print "2: View Song Lyrics"
-        print "3: Save Song Locally"
-        print "4: Clear Databse"
-        print "5: To Exit"
+        print "2: Clear Databse"
+        print "3: To Exit"
         print "*" * 30
         menu_item=raw_input("Please enter your selection: ")
 
@@ -115,15 +128,9 @@ if __name__ == "__main__":
             lyric.song_find(query)
 
         elif menu_item=="2":
-            lyric.song_view()
-
-        elif menu_item=="3":
-            lyric.song_save()
-
-        elif menu_item=="4":
             lyric.song_clear()
 
-        elif menu_item=="5":
+        elif menu_item=="3":
             print "Goodbye"
             exit(0)
 
