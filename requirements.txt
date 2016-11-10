@@ -1,4 +1,7 @@
+colorama==0.3.7
 docopt==0.6.2
+emoji==0.3.9
 prettytable==0.7.2
+pyfiglet==0.7.5
 requests==2.11.1
 SQLAlchemy==1.1.3

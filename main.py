@@ -10,10 +10,14 @@
 
 """
 
+import os
+import cmd
+import emoji
 
 from docopt import docopt, DocoptExit
-import cmd
-import os
+from pyfiglet import Figlet
+from colorama import Back, Fore, Style, init
+
 from singalong import Lyrics
 
 def docopt_cmd(func):
@@ -47,10 +51,19 @@ def docopt_cmd(func):
     return fn
 
 lyric = Lyrics()
-class Singalong (cmd.Cmd):
-    intro = 'Welcome to my interactive program!' \
-        + ' (type help for a list of commands.)'
-    prompt = '(my_program) '
+class Singalong(cmd.Cmd):
+
+    def intro():
+        init()
+        font = Figlet(font='doubleshorts')
+        print (Fore.CYAN + font.renderText("NGOMA"))
+        print "*" * 40
+        print 'something'
+        print 'another thing'
+        print "*" * 40
+
+    intro()
+    prompt = 'ngoma --> '
     file = None
 
     @docopt_cmd
@@ -65,6 +78,7 @@ class Singalong (cmd.Cmd):
     @docopt_cmd
     def do_song_view(self, arg):
         """Usage: song_view <track_number>"""
+        print emoji.emojize(":musical_note:")
         song_id = arg['<track_number>']
         # lyric = Lyrics()
         lyric.song_view(song_id)
