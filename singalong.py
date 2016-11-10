@@ -106,34 +106,3 @@ class Lyrics():
         s=self.session.query(Music).delete()
         self.session.commit()
         print "**************Database Cleared**************\n\n"
-
-
-'''
-
-if __name__ == "__main__":
-    lyric=Lyrics()
-    query = raw_input("Enter text to search for song, lyrics or artist: ")
-    lyric.song_find(query)
-    while True:
-        print "\nWhat would you like to do?"
-        print "*"*30
-        print "1: Find a song"
-        print "2: Clear Databse"
-        print "3: To Exit"
-        print "*" * 30
-        menu_item=raw_input("Please enter your selection: ")
-
-        if menu_item=="1":
-            query=raw_input("Enter text to search for song, lyrics or artist: ")
-            lyric.song_find(query)
-
-        elif menu_item=="2":
-            lyric.song_clear()
-
-        elif menu_item=="3":
-            print "Goodbye"
-            exit(0)
-
-        else:
-            print "Invalid Entry"
-'''
